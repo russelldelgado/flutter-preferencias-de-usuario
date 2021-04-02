@@ -15,11 +15,6 @@ class PreferenciasUsuario {
 //la tengo aqui para poderla consumir despues
   SharedPreferences _prefs;
 
-  //ninguna de estas propiedades se usa ,  es solo como referencia para que sepamos que esto es lo que vamos a almacenar en esta clase
-  //bool _colorSecundario ;
-  //int _genero;
-  //String _nombre ;
-
   //con esto ya tengo la instancia de mis preferencias que siempre sera la misma
   initPrefs() async{ 
    this._prefs = await SharedPreferences.getInstance();
@@ -37,12 +32,39 @@ class PreferenciasUsuario {
     _prefs.setInt('genero', value);
   }
 
-  //GET Y SETTER DEL NUMERO
+  //GET Y SETTER DEL color secundario
   
+  get colorSecundario{
+    //??esto quiere decir que si el valor es nulo me devuleva un uno 
+    return _prefs.getBool('colorSecundario') ?? false;
+  }
 
+  set colorSecundario(bool value){
+    _prefs.setBool('colorSecundario', value);
+  }
 
   
-  //GET Y SETTER DEL NOMBRE
+  //GET Y SETTER DEL NOMBRE USUARIO
+
+  get nombreUsuario{
+    //??esto quiere decir que si el valor es nulo me devuleva un uno 
+    return _prefs.getString('nombreUsuario') ?? '';
+  }
+
+  set nombreUsuario(String value){
+    _prefs.setString('nombreUsuario', value);
+  }
+
+  //GET Y SETTER DEL NOMBRE USUARIO
+
+  get ultimaPagina{
+    //??esto quiere decir que si el valor es nulo me devuleva un uno 
+    return _prefs.getString('ultimaPagina') ?? 'home';
+  }
+
+  set ultimaPagina(String value){
+    _prefs.setString('ultimaPagina', value);
+  }
 
 
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:perferencias/src/pages/sharedpreferences/preferencias_usuario.dart';
 import 'package:perferencias/src/widgets/widgets_menu.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettinPage extends StatefulWidget {
   static final String routeName = 'setting';
@@ -12,37 +12,36 @@ class SettinPage extends StatefulWidget {
 class _SettinPageState extends State<SettinPage> {
   //vamos a crear las porpiedades que almacenan el valor de las preferencias
   
-  bool _colorSecundario = false;
-  int _genero = 1;
-  String _nombre = "pedro";
+  bool _colorSecundario;
+  int _genero;
+  String _nombre;
   //esto no se puede inincializar aqui por eso lo hacemos en el initstate mas abajo
   //TextEditingController _textController = TextEditingController(text: _nombre);
   TextEditingController _textController;
+
+  final prefs  = PreferenciasUsuario();
 
   //todos los statefull widgets tienen una parte en su ciclo de vida llamado init state
    
    @override
   void initState() {
     super.initState();
+
+    prefs.ultimaPagina = SettinPage.routeName;
+    _genero = prefs.genero;
+    _colorSecundario  = prefs.colorSecundario;
+    _nombre = prefs.nombreUsuario;
+    
     _textController = new TextEditingController(text: _nombre);
-    cargarPref();
+
   }
 
   //----------------------------------------------------METODOS------------------------------------------------------
 
-  cargarPref()async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _genero = prefs.getInt('genero');
-    setState(() {
-      
-    });
+  
 
-  }
-
-  _setSelectedRadio(int valor )async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('genero', valor)  ;
-
+  _setSelectedRadio(int valor ){
+    prefs.genero  = valor;
     _genero = valor;
     setState(() {});
 
@@ -52,7 +51,10 @@ class _SettinPageState extends State<SettinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MenuWidget(),
-      appBar: AppBar(title: Text('Preferencias'),),
+      appBar: AppBar(
+        title: Text('Preferencias'),
+        backgroundColor: (prefs.colorSecundario) ? Colors.teal : Colors.blue ,
+        ),
       body: ListView(
         children: [
           Container(
@@ -69,7 +71,7 @@ class _SettinPageState extends State<SettinPage> {
             onChanged: (value) {
               setState(() {
               _colorSecundario = value;
-                
+              prefs.colorSecundario = value;
               });
             },
             ),
@@ -102,6 +104,7 @@ class _SettinPageState extends State<SettinPage> {
                   ),
                   onChanged: (value) {
                     _nombre = value;
+                    prefs.nombreUsuario = value;
                   },
                 ),
               )
